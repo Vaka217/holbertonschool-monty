@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
          return EXIT_FAILURE;
     }
 
-    while(tempChar = fgetc(file))
+    while((tempChar = fgetc(file)))
     {
         if (tempChar == EOF) {
             line[tempCharIdx] = '\0';
