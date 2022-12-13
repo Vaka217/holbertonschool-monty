@@ -2,23 +2,24 @@
 
 void op_push(stack_t **stack, unsigned int line_number)
 {
-	stack_t *new = malloc(sizeof(stack_t)), *end = *stack;
-
+	stack_t *new, *end = *stack;
+	
+	new = malloc(sizeof(stack_t));
 	if (!new)
 		return;
 	new->n = line_number;
 	new->next = NULL;
-	new->prev = NULL;
-	if (!*stack)
-	{
-		*stack = new;
-	}
-	else
+	if (end)
 	{
 		while (end->next)
 			end = end->next;
-		end->next = new;
 		new->prev = end;
+		end->next = new;
+	}
+	else
+	{
+		*stack = new;
+		new->prev = NULL;
 	}
 }
 

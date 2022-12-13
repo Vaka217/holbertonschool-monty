@@ -1,72 +1,69 @@
-#define BUFFER_MAX_LENGTH 1024
 #include "monty.h"
 
-void getopc(char *line, stack_t **stack)
+stack_t *stack = NULL;
+int isNumber(char s[]) 
+{ 
+    for (int i = 0; s[i]; i++) 
+        if (!isdigit(s[i]))
+            return 0; 
+    return 1; 
+}
+
+void getopc(char *opc, int num, unsigned int line_num)
 {
 	instruction_t instructions[] = {
 		{"push", op_push},
 		{"pall", op_pall},
 		{NULL, NULL},
 	};
-	int i = 0, num;
-	char *opc = NULL;
+	int i = 0;
 
-	opc = strtok(line, " \t\n");
-	if (strcmp(opc, "push") == 0)
-		num = atoi(strtok(NULL, " \t"));
 	for (i = 0; instructions[i].opcode; i++)
 	{
 		if (strcmp(opc, instructions[i].opcode) == 0)
-		{
-			instructions[i].f(stack, num);
-		}
+			instructions[i].f(&stack, num);
 	}
-/*	fprintf(stderr, "L%d: unknown instruction %s\n", num, opc);
-	exit(EXIT_FAILURE);*/
+	if (instructions[i].opcode == NULL)
+	{
+		fprintf(stderr, "L%u: unknown instruction %s", line_num, opc);
+		exit(EXIT_FAILURE);
+	}
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char **argv)
 {
-    FILE *file = NULL;
-    char line[BUFFER_MAX_LENGTH];
-    int tempChar;
-    unsigned int tempCharIdx = 0U;
-    char *dynamicLine = NULL;
-    stack_t *stack = NULL;
+	FILE *fp = NULL;
+	char buffer[256], *opc = NULL, *token;
+	int num = -1, inputs = 0;
 
-    if (argc == 2)
-         file = fopen(argv[1], "r");
-    else {
-         fprintf(stderr, "error: wrong number of arguments\n"
-                         "usage: %s textfile\n", argv[0]);
-         return EXIT_FAILURE;
-    }
-
-    if (!file) {
-         fprintf(stderr, "error: could not open textfile: %s\n", argv[1]);
-         return EXIT_FAILURE;
-    }
-
-    while((tempChar = fgetc(file)))
-    {
-        if (tempChar == EOF) {
-            line[tempCharIdx] = '\0';
-            dynamicLine = strdup(line);
-            free(dynamicLine);
-            dynamicLine = NULL;
-            break;
-        }
-        else if (tempChar == '\n') {
-            line[tempCharIdx] = '\0';
-            tempCharIdx = 0U;
-            dynamicLine = strdup(line);
-            getopc(dynamicLine, &stack);
-            free(dynamicLine);
-            dynamicLine = NULL;
-            continue;
-        }
-        else
-            line[tempCharIdx++] = (char)tempChar;
-    }
-    return EXIT_SUCCESS;
+	if (argc != 2)
+	{
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
+	}
+	fp = fopen(argv[1], "r");
+	if (!fp)
+	{
+		fprintf(stderr, "Error: Can't open file %s", argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	while (fgets(buffer, 256, fp))
+	{
+		inputs++;
+		opc = strtok(buffer, " \t\n");
+		if ((token = strtok(NULL, " \t\n")))
+		{
+			if (isNumber(token) == 1)
+				num = atoi(token);
+			else
+			{
+				fprintf(stderr, "L%u: usage: push integer", inputs);
+				exit(EXIT_FAILURE);
+			}
+		}
+		getopc(opc, num, inputs);
+	}
+	fclose(fp);
+	return(0);
 }
+
