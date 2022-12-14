@@ -8,9 +8,11 @@ stack_t *stack = NULL;
  */
 int isNumber(char s[])
 {
+	int i = 0;
+
 	if (s[0] == '-')
 		s[0] = '0';
-	for (int i = 0; s[i]; i++)
+	for (i = 0; s[i]; i++)
 		if (!isdigit(s[i]))
 			return (0);
 	return (1);
@@ -100,5 +102,5 @@ int main(int argc, char **argv)
 				fprintf(stderr, "L%u: usage: push integer\n", inputs);
 				exit(EXIT_FAILURE); }
 			getopc(opc, num, inputs); } }
-	total_free(), fclose(fp);
+	fclose(fp), total_free();
 	return (0); }

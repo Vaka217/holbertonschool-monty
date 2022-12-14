@@ -8,21 +8,22 @@
 void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index)
 {
 	int cp;
+	stack_t *temp;
 
-
-	for (; (*stack)->next; *stack = (*stack)->next)
-	{
-	}
 	if (!(*stack))
 	{
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	if (!(*stack))
+	temp = *stack;
+	while (temp->next)
+		temp = temp->next;
+	if (!temp->prev)
 	{
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 2);
 		exit(EXIT_FAILURE);
 	}
+	return;
 	cp = (*stack)->n;
 	(*stack)->n = (*stack)->prev->n;
 	(*stack)->prev->n = cp;
