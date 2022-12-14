@@ -29,10 +29,13 @@ void getopc(char *opc, int num, unsigned int line_num)
 		{"pint", op_pint},
 		{"pop", op_pop},
 		{"swap", op_swap},
+		{"add", op_add},
 		{NULL, NULL},
 	};
 	int i = 0;
 
+	if (strcmp("nop", opc) == 0)
+		return;
 	if (num == -1 && strcmp(opc, "push") == 0)
 	{
 		fprintf(stderr, "L%u: usage: push integer\n", line_num);

@@ -43,6 +43,7 @@ void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 void op_push(stack_t **stack, unsigned int line_number);
 void op_pop(stack_t **stack, unsigned int index);
 void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index);
+void op_add(stack_t **stack, __attribute__((unused)) unsigned int index);
 void total_free(void);
 
 #endif
