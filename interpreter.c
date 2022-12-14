@@ -1,14 +1,14 @@
 #include "monty.h"
 
 stack_t *stack = NULL;
-int isNumber(char s[]) 
-{ 
-    if (s[0] == '-')
-	    s[0] = '0';
-    for (int i = 0; s[i]; i++) 
-        if (!isdigit(s[i]))
-            return 0; 
-    return 1; 
+int isNumber(char s[])
+{
+	if (s[0] == '-')
+		s[0] = '0';
+	for (int i = 0; s[i]; i++)
+		if (!isdigit(s[i]))
+			return (0);
+	return (1);
 }
 
 void getopc(char *opc, int num, unsigned int line_num)
@@ -49,43 +49,36 @@ int main(int argc, char **argv)
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
+		exit(EXIT_FAILURE); }
 	fp = fopen(argv[1], "r");
 	if (!fp)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
+		exit(EXIT_FAILURE); }
 	while (fgets(buffer, 256, fp))
 	{
 		inputs++;
 		if (strcmp(buffer, "\n") == 0) /* if only newline is passed */
 			continue;
-		if ((opc = strtok(buffer, " \t\n")))
+		opc = strtok(buffer, " \t\n");
+		if (opc)
 		{
-		if ((token = strtok(NULL, " \t\n")) && strcmp("pall", opc) != 0)
-		{
-			if (isNumber(token) == 1 && token[0] != '-')
-				num = atoi(token);
-			else if (isNumber(token) == 1 && token[0] == '-')
-				num = -1 * (atoi(token));
-			else
+			token = strtok(NULL, " \t\n");
+			if (token && strcmp("pall", opc) != 0)
+			{
+				if (isNumber(token) == 1 && token[0] != '-')
+					num = atoi(token);
+				else if (isNumber(token) == 1 && token[0] == '-')
+					num = -1 * (atoi(token));
+				else
+				{
+					fprintf(stderr, "L%u: usage: push integer\n", inputs);
+					exit(EXIT_FAILURE); } }
+			else if (strcmp("push", opc) == 0)
 			{
 				fprintf(stderr, "L%u: usage: push integer\n", inputs);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else if (strcmp("push", opc) == 0)
-		{
-			fprintf(stderr, "L%u: usage: push integer\n", inputs);
-			exit(EXIT_FAILURE);
-		}
-		getopc(opc, num, inputs);
-		}
-	}
-	total_free();
-	fclose(fp);
-	return(0);
-}
+				exit(EXIT_FAILURE); }
+			getopc(opc, num, inputs); } }
+	total_free(), fclose(fp);
+	return (0); }
 

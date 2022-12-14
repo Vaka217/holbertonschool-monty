@@ -3,7 +3,7 @@
 void op_push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new = NULL, *end = *stack;
-	
+
 	new = malloc(sizeof(stack_t));
 	if (!new)
 		return;
