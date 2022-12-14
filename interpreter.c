@@ -3,6 +3,8 @@
 stack_t *stack = NULL;
 int isNumber(char s[]) 
 { 
+    if (s[0] == '-')
+	    s[0] = '0';
     for (int i = 0; s[i]; i++) 
         if (!isdigit(s[i]))
             return 0; 
@@ -18,16 +20,24 @@ void getopc(char *opc, int num, unsigned int line_num)
 	};
 	int i = 0;
 
-	for (i = 0; instructions[i].opcode; i++)
+	if (num == -1 && strcmp(opc, "push") == 0)
 	{
-		if (strcmp(opc, instructions[i].opcode) == 0)
-			instructions[i].f(&stack, num);
-	}
-	if (instructions[i].opcode == NULL)
-	{
-		fprintf(stderr, "L%u: unknown instruction %s", line_num, opc);
+		fprintf(stderr, "L%u: usage: push integer\n", line_num);
 		exit(EXIT_FAILURE);
 	}
+
+	for (i = 0; instructions[i].opcode; i++)
+	{
+		if (!opc)
+			return;
+		if (strcmp(opc, instructions[i].opcode) == 0)
+		{
+			instructions[i].f(&stack, num);
+			return;
+		}
+	}
+	fprintf(stderr, "L%u: unknown instruction %s\n", line_num, opc);
+	exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
@@ -44,20 +54,24 @@ int main(int argc, char **argv)
 	fp = fopen(argv[1], "r");
 	if (!fp)
 	{
-		fprintf(stderr, "Error: Can't open file %s", argv[1]);
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
 	while (fgets(buffer, 256, fp))
 	{
 		inputs++;
+		if (strcmp(buffer, "\n") == 0) /* if only newline is passed */
+			continue;
 		opc = strtok(buffer, " \t\n");
 		if ((token = strtok(NULL, " \t\n")))
 		{
-			if (isNumber(token) == 1)
+			if (isNumber(token) == 1 && token[0] != '-')
 				num = atoi(token);
+			else if (isNumber(token) == 1 && token[0] == '-')
+				num = -1 * (atoi(token));
 			else
 			{
-				fprintf(stderr, "L%u: usage: push integer", inputs);
+				fprintf(stderr, "L%u: usage: push integer\n", inputs);
 				exit(EXIT_FAILURE);
 			}
 		}

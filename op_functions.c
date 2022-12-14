@@ -23,9 +23,18 @@ void op_push(stack_t **stack, unsigned int line_number)
 	}
 }
 
-void op_pall(stack_t **stack, unsigned int line_number)
+void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
-	for (; line_number > 1; line_number--)
+/*	if (!*stack)
+		return;
+	while((*stack)->next)
+		*stack = (*stack)->next;
+	while ((*stack)->prev)
+	{
+		*stack = (*stack)->prev;
+		printf("%u\n", (*stack)->n);
+	}*/
+		for (; line_number > 1; line_number--)
 		(*stack) = (*stack)->next;
 	while (*stack)
 	{
