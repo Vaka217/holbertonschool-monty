@@ -76,7 +76,10 @@ void op_pop(stack_t **stack, __attribute__((unused)) unsigned int index)
 	}
 	delete = *stack;
 	if ((*stack)->next == NULL && (*stack)->prev == NULL)
+	{
 		*stack = NULL;
+		free(delete);
+	}
 	else
 	{
 		(*stack)->prev->next = NULL;
