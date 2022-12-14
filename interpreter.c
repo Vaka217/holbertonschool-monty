@@ -1,6 +1,11 @@
 #include "monty.h"
 
 stack_t *stack = NULL;
+/**
+ * isNumber - checks kadsk
+ * @s: array
+ * Return: 1
+ */
 int isNumber(char s[])
 {
 	if (s[0] == '-')
@@ -10,12 +15,18 @@ int isNumber(char s[])
 			return (0);
 	return (1);
 }
-
+/**
+ * getopc - s
+ * @opc: array
+ * @num: int
+ * @line_num: uint
+ */
 void getopc(char *opc, int num, unsigned int line_num)
 {
 	instruction_t instructions[] = {
 		{"push", op_push},
 		{"pall", op_pall},
+		{"pint", op_pint},
 		{NULL, NULL},
 	};
 	int i = 0;
@@ -39,7 +50,12 @@ void getopc(char *opc, int num, unsigned int line_num)
 	fprintf(stderr, "L%u: unknown instruction %s\n", line_num, opc);
 	exit(EXIT_FAILURE);
 }
-
+/**
+ * main - sad
+ * @argc: argc
+ * @argv: argv
+ * Return: 0
+ */
 int main(int argc, char **argv)
 {
 	FILE *fp = NULL;
@@ -64,7 +80,7 @@ int main(int argc, char **argv)
 		if (opc)
 		{
 			token = strtok(NULL, " \t\n");
-			if (token && strcmp("pall", opc) != 0)
+			if (token && strcmp("pall", opc) != 0 && strcmp("pint", opc) != 0)
 			{
 				if (isNumber(token) == 1 && token[0] != '-')
 					num = atoi(token);

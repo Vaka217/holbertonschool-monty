@@ -1,5 +1,9 @@
 #include "monty.h"
-
+/**
+ * op_push - pushes an element to the stack
+ * @stack: array of pointers
+ * @line_number: uint
+ */
 void op_push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new = NULL, *end = *stack;
@@ -22,7 +26,11 @@ void op_push(stack_t **stack, unsigned int line_number)
 		new->prev = NULL;
 	}
 }
-
+/**
+ * op_pall - prints all the values on the stack
+ * @stack: array of pointers
+ * @line_number: uint
+ */
 void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
 	stack_t *temp;
@@ -38,7 +46,28 @@ void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 		temp = temp->prev;
 	}
 }
+/**
+ * op_pint - prints the value at the top of the stack.
+ * @stack: array of pointers
+ * @line_number: uint
+ */
+void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number)
+{
+	stack_t *temp;
 
+	if (!*stack)
+	{
+		fprintf(stderr, "L%u: can't pint, stack empty", line_number);
+		exit(EXIT_FAILURE);
+	}
+	temp = *stack;
+	while (temp->next)
+		temp = temp->next;
+	printf("%d\n", temp->n);
+}
+/**
+ * total_free - frees
+ */
 void total_free(void)
 {
 	stack_t *to_be_free;
