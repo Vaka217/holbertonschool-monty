@@ -38,3 +38,20 @@ void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 		temp = temp->prev;
 	}
 }
+
+void total_free(void)
+{
+	stack_t *to_be_free;
+	stack_t *temp = NULL;
+
+	to_be_free = stack;
+
+	while (to_be_free)
+	{
+		temp = to_be_free->next;
+
+		free(to_be_free);
+
+		to_be_free = temp;
+	}
+}

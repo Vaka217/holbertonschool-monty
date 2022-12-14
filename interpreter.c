@@ -77,6 +77,7 @@ int main(int argc, char **argv)
 		}
 		getopc(opc, num, inputs);
 	}
+	total_free();
 	fclose(fp);
 	return(0);
 }
