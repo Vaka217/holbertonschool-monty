@@ -65,10 +65,15 @@ void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 		temp = temp->next;
 	printf("%d\n", temp->n);
 }
-
+/**
+ * op_pop - prints the value at the top of the stack.
+ * @stack: array of pointers
+ * @index: uint
+ */
 void op_pop(stack_t **stack, __attribute__((unused)) unsigned int index)
 {
 	stack_t *delete;
+
 	if (!*stack)
 	{
 		fprintf(stderr, "L%u: can't pop an empty stack\n", 1);
@@ -96,13 +101,10 @@ void total_free(void)
 	stack_t *temp = NULL;
 
 	to_be_free = stack;
-
 	while (to_be_free)
 	{
 		temp = to_be_free->next;
-
 		free(to_be_free);
-
 		to_be_free = temp;
 	}
 }

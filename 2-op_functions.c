@@ -1,5 +1,10 @@
 #include "monty.h"
 
+/**
+ * op_swap - prints the value at the top of the stack.
+ * @stack: array of pointers
+ * @index: uint
+ */
 void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index)
 {
 	int cp;
@@ -9,18 +14,20 @@ void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index)
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	while ((*stack)->next)
-		(*stack) = (*stack)->next;	
-	if (!(*stack)->prev)
+	if (!(*stack)->next)
 	{
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	cp = (*stack)->n;
-	(*stack)->n = (*stack)->prev->n;
-	(*stack)->prev->n = cp;
+	(*stack)->n = (*stack)->next->n;
+	(*stack)->next->n = cp;
 }
-
+/**
+ * op_add - prints the value at the top of the stack.
+ * @stack: array of pointers
+ * @index: uint
+ */
 void op_add(stack_t **stack, __attribute__((unused)) unsigned int index)
 {
 	if (!*stack)
@@ -29,7 +36,7 @@ void op_add(stack_t **stack, __attribute__((unused)) unsigned int index)
 		exit(EXIT_FAILURE);
 	}
 	while ((*stack)->next)
-		(*stack) = (*stack)->next;	
+		(*stack) = (*stack)->next;
 	if (!(*stack)->prev)
 	{
 		fprintf(stderr, "L%u: can't add, stack too short\n", 2);
