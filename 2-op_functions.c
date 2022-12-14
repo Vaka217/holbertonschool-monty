@@ -9,19 +9,24 @@ void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index)
 {
 	int cp;
 
-	if (!*stack)
+
+	for (; (*stack)->next; *stack = (*stack)->next)
+	{
+	}
+	printf("%u\n", (*stack)->n);
+	if (!(*stack))
 	{
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 1);
 		exit(EXIT_FAILURE);
 	}
-	if (!(*stack)->next)
+	if (!(*stack))
 	{
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	cp = (*stack)->n;
-	(*stack)->n = (*stack)->next->n;
-	(*stack)->next->n = cp;
+	(*stack)->n = (*stack)->prev->n;
+	(*stack)->prev->n = cp;
 }
 /**
  * op_add - prints the value at the top of the stack.
