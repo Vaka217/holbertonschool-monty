@@ -23,10 +23,9 @@ void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index)
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	return;
-	cp = (*stack)->n;
-	(*stack)->n = (*stack)->prev->n;
-	(*stack)->prev->n = cp;
+	cp = temp->n;
+	temp->n = temp->prev->n;
+	temp->prev->n = cp;
 }
 /**
  * op_add - prints the value at the top of the stack.
