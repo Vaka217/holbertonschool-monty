@@ -27,6 +27,7 @@ void getopc(char *opc, int num, unsigned int line_num)
 		{"push", op_push},
 		{"pall", op_pall},
 		{"pint", op_pint},
+		{"pop", op_pop},
 		{NULL, NULL},
 	};
 	int i = 0;
