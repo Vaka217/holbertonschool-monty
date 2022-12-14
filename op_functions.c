@@ -2,7 +2,7 @@
 
 void op_push(stack_t **stack, unsigned int line_number)
 {
-	stack_t *new, *end = *stack;
+	stack_t *new = NULL, *end = *stack;
 	
 	new = malloc(sizeof(stack_t));
 	if (!new)
@@ -21,12 +21,16 @@ void op_push(stack_t **stack, unsigned int line_number)
 		*stack = new;
 		new->prev = NULL;
 	}
+	free(new);
 }
 
 void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
-	stack_t *temp = *stack;
+	stack_t *temp;
 
+	if (!*stack)
+		return;
+	temp = *stack;
 	while (temp->next)
 		temp = temp->next;
 	while (temp)

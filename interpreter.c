@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 		if (strcmp(buffer, "\n") == 0) /* if only newline is passed */
 			continue;
 		opc = strtok(buffer, " \t\n");
-		if ((token = strtok(NULL, " \t\n")))
+		if ((token = strtok(NULL, " \t\n")) && strcmp("pall", opc) != 0)
 		{
 			if (isNumber(token) == 1 && token[0] != '-')
 				num = atoi(token);
