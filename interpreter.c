@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 		if (opc)
 		{
 			token = strtok(NULL, " \t\n");
-			if (token && strcmp("pall", opc) != 0 && strcmp("pint", opc) != 0)
+			if (token && strcmp("push", opc) == 0)
 			{
 				if (isNumber(token) == 1 && token[0] != '-')
 					num = atoi(token);

@@ -41,6 +41,7 @@ extern stack_t *stack;
 void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 void op_push(stack_t **stack, unsigned int line_number);
+void op_pop(stack_t **stack, unsigned int index);
 void total_free(void);
 
 #endif
