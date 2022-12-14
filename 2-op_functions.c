@@ -13,7 +13,6 @@ void op_swap(stack_t **stack, __attribute__((unused)) unsigned int index)
 	for (; (*stack)->next; *stack = (*stack)->next)
 	{
 	}
-	printf("%u\n", (*stack)->n);
 	if (!(*stack))
 	{
 		fprintf(stderr, "L%u: can't swap, stack too short\n", 1);
