@@ -21,7 +21,6 @@ void op_push(stack_t **stack, unsigned int line_number)
 		*stack = new;
 		new->prev = NULL;
 	}
-	free(new);
 }
 
 void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
