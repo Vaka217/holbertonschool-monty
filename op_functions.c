@@ -57,7 +57,7 @@ void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 
 	if (!*stack)
 	{
-		fprintf(stderr, "L%u: can't pint, stack empty", 1);
+		fprintf(stderr, "L%u: can't pint, stack empty\n", 1);
 		exit(EXIT_FAILURE);
 	}
 	temp = *stack;
