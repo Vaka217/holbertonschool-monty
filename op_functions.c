@@ -1,17 +1,26 @@
 #include "monty.h"
 /**
  * op_push - pushes an element to the stack
- * @stack: array of pointers
- * @line_number: uint
+ * @stack: Doubly linked list.
+ * @line_number: Number of the current line.
  */
 void op_push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new = NULL, *end = *stack;
+	int num = 0;
+	char *numstr = NULL;
 
+	numstr = strtok(NULL, " \t\n");
+	if (!numstr || isNumber(numstr) == 0)
+	{
+		fprintf(stderr, "L%u: usage: push integer\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+	num = atoi(numstr);
 	new = malloc(sizeof(stack_t));
 	if (!new)
 		return;
-	new->n = line_number;
+	new->n = num;
 	new->next = NULL;
 	if (end)
 	{
@@ -28,8 +37,8 @@ void op_push(stack_t **stack, unsigned int line_number)
 }
 /**
  * op_pall - prints all the values on the stack
- * @stack: array of pointers
- * @line_number: uint
+ * @stack: Doubly linked list.
+ * @line_number: Number of the current line.
  */
 void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
@@ -48,16 +57,16 @@ void op_pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 }
 /**
  * op_pint - prints the value at the top of the stack.
- * @stack: array of pointers
- * @line_number: uint
+ * @stack: Doubly linked list.
+ * @line_number: Number of the current line.
  */
-void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number)
+void op_pint(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
 
 	if (!*stack)
 	{
-		fprintf(stderr, "L%u: can't pint, stack empty\n", 1);
+		fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	temp = *stack;
@@ -66,36 +75,37 @@ void op_pint(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 	printf("%d\n", temp->n);
 }
 /**
- * op_pop - prints the value at the top of the stack.
- * @stack: array of pointers
- * @index: uint
+ * op_pop - deletes the current top of the stack.
+ * @stack: Doubly linked list.
+ * @line_number: Number of the current line.
  */
-void op_pop(stack_t **stack, __attribute__((unused)) unsigned int index)
+void op_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *delete;
+	stack_t *delete = *stack;
 
 	if (!*stack)
 	{
-		fprintf(stderr, "L%u: can't pop an empty stack\n", 1);
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	delete = *stack;
-	if ((*stack)->next == NULL && (*stack)->prev == NULL)
+	if (!delete->next)
 	{
+		free(*stack);
 		*stack = NULL;
-		free(delete);
 	}
 	else
 	{
-		(*stack)->prev->next = NULL;
-		(*stack) = delete->prev;
+		*stack = (*stack)->next;
+		(*stack)->prev = NULL;
 		free(delete);
 	}
 }
+
 /**
- * total_free - frees
+ * total_free - free all.
+ * @stack: Doubly linked list to be free.
  */
-void total_free(void)
+void total_free(stack_t *stack)
 {
 	stack_t *to_be_free;
 	stack_t *temp = NULL;

@@ -1,10 +1,10 @@
 #include "monty.h"
 
-stack_t *stack = NULL;
 /**
- * isNumber - checks kadsk
- * @s: array
- * Return: 1
+ * isNumber - checks if a string is a number
+ * @s: String to check
+ *
+ * Return: 1 if its a number, 0 otherwise.
  */
 int isNumber(char s[])
 {
@@ -18,12 +18,12 @@ int isNumber(char s[])
 	return (1);
 }
 /**
- * getopc - s
- * @opc: array
- * @num: int
- * @line_num: uint
+ * getopc - Gets the opcode function needed.
+ * @opc: Opcode name
+ *
+ * Return: The function of the given opcode or NULL.
  */
-void getopc(char *opc, int num, unsigned int line_num)
+void (*getopc(char *opc))(stack_t **stack, unsigned int line_number)
 {
 	instruction_t instructions[] = {
 		{"push", op_push},
@@ -36,71 +36,49 @@ void getopc(char *opc, int num, unsigned int line_num)
 	};
 	int i = 0;
 
-	if (strcmp("nop", opc) == 0)
-		return;
-	if (num == -1 && strcmp(opc, "push") == 0)
-	{
-		fprintf(stderr, "L%u: usage: push integer\n", line_num);
-		exit(EXIT_FAILURE);
-	}
-
 	for (i = 0; instructions[i].opcode; i++)
 	{
-		if (!opc)
-			return;
 		if (strcmp(opc, instructions[i].opcode) == 0)
-		{
-			instructions[i].f(&stack, num);
-			return;
-		}
+			return (instructions[i].f);
 	}
-	fprintf(stderr, "L%u: unknown instruction %s\n", line_num, opc);
-	exit(EXIT_FAILURE);
+	return (instructions[i].f);
 }
 /**
- * main - sad
- * @argc: argc
- * @argv: argv
+ * main - main function
+ * @argc: Number of arguments
+ * @argv: Array of arguments
+ *
  * Return: 0
  */
 int main(int argc, char **argv)
 {
 	FILE *fp = NULL;
-	char buffer[256], *opc = NULL, *token;
-	int num = -1, inputs = 0;
+	char *buffer = NULL, *opc = NULL;
+	int inputs = 0;
+	size_t bufsize = 0;
+	stack_t *stack = NULL;
+	void (*f)(stack_t **stack, unsigned int line_num);
 
 	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE); }
+		fprintf(stderr, "USAGE: monty file\n"), exit(EXIT_FAILURE);
 	fp = fopen(argv[1], "r");
 	if (!fp)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE); }
-	while (fgets(buffer, 256, fp))
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]), exit(EXIT_FAILURE);
+	while (getline(&buffer, &bufsize, fp) != -1)
 	{
 		inputs++;
-		if (strcmp(buffer, "\n") == 0) /* if only newline is passed */
-			continue;
 		opc = strtok(buffer, " \t\n");
-		if (opc)
+		if (!opc || strcmp(opc, "nop") == 0 || strcmp(opc, "\n") == 0)
+			continue;
+		f = getopc(opc);
+		if (!f)
 		{
-			token = strtok(NULL, " \t\n");
-			if (token && strcmp("push", opc) == 0)
-			{
-				if (isNumber(token) == 1 && token[0] != '-')
-					num = atoi(token);
-				else if (isNumber(token) == 1 && token[0] == '-')
-					num = -1 * (atoi(token));
-				else
-				{
-					fprintf(stderr, "L%u: usage: push integer\n", inputs);
-					exit(EXIT_FAILURE); } }
-			else if (strcmp("push", opc) == 0)
-			{
-				fprintf(stderr, "L%u: usage: push integer\n", inputs);
-				exit(EXIT_FAILURE); }
-			getopc(opc, num, inputs); } }
-	fclose(fp), total_free();
+			fprintf(stderr, "L%u: unknown instruction %s\n", inputs, opc);
+			exit(EXIT_FAILURE);
+		}
+		f(&stack, inputs);
+	}
+	free(buffer);
+	fclose(fp);
+	total_free(stack);
 	return (0); }
