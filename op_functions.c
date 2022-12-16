@@ -81,26 +81,25 @@ void op_pint(stack_t **stack, unsigned int line_number)
  */
 void op_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *delete = *stack;
+	stack_t *node = *stack, *delete;
 
-	if (!*stack)
+	if (!*stack || !stack)
 	{
 		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	if (!delete->next)
+	if (!node->next)
 	{
-		free(*stack);
+		free(node);
 		*stack = NULL;
 	}
 	else
-	{
-		*stack = (*stack)->next;
-		(*stack)->prev = NULL;
-		free(delete);
-	}
+		while (node->next->next)
+			node = node->next;
+	delete = node->next;
+	node->next = NULL;
+	free(delete);
 }
-
 /**
  * total_free - free all.
  * @stack: Doubly linked list to be free.
