@@ -34,18 +34,15 @@ void op_swap(stack_t **stack, unsigned int line_number)
  */
 void op_add(stack_t **stack, unsigned int line_number)
 {
-	if (!*stack)
+	stack_t *temp = *stack;
+
+	if (!*stack || !temp->next)
 	{
 		fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	while ((*stack)->next)
-		(*stack) = (*stack)->next;
-	if (!(*stack)->prev)
-	{
-		fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
-		exit(EXIT_FAILURE);
-	}
-	(*stack)->prev->n += (*stack)->n;
+	while (temp->next->next)
+		temp = temp->next;
+	temp->n += temp->next->n;
 	op_pop(stack, line_number);
 }
